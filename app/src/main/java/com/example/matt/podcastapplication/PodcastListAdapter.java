@@ -88,4 +88,6 @@ public class PodcastListAdapter extends ArrayAdapter<Podcast> {
 
         return convertView;
     }
+
+
 }

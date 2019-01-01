@@ -1,5 +1,6 @@
 package com.example.matt.podcastapplication;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -10,7 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class PodcastPlayer extends AppCompatActivity {
+public class PodcastPlayer extends Activity {
 
     private Button btn;
     private boolean playPause;

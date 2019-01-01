@@ -18,11 +18,17 @@ public class PodcastPlayer extends Activity {
     private MediaPlayer mediaPlayer;
     private ProgressDialog progressDialog;
     private boolean initialStage = true;
+    private Podcast podcast;
 
+    public PodcastPlayer(Podcast podcast){
+        this.podcast = podcast;
+    }
+    public PodcastPlayer(){
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.podcast_player_layout);
         btn = (Button) findViewById(R.id.audioStreamBtn);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -67,7 +73,9 @@ public class PodcastPlayer extends Activity {
     }
 
     class Player extends AsyncTask<String, Void, Boolean> {
+
         @Override
+
         protected Boolean doInBackground(String... strings) {
             Boolean prepared = false;
 

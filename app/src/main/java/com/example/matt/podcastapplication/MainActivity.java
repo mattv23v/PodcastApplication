@@ -76,8 +76,10 @@ public class MainActivity extends Activity implements AsyncResponse{
                    Toast.makeText(getApplicationContext(),
                            podCast.getTitle().toString(), Toast.LENGTH_LONG).show();
 
+                   PodcastPlayer player = new PodcastPlayer(podCast);
+
                    Intent myIntent = new Intent(MainActivity.this,
-                           PodcastPlayer.class);
+                           player.getClass());
                    startActivity(myIntent);
                }
 

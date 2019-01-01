@@ -23,7 +23,6 @@ public class MainActivity extends Activity implements AsyncResponse{
     private SearchPodcasts search;
     private ArrayList podcastList;
     private ListView mListView;
-  //  private SearchPodcasts asyncTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,17 +50,7 @@ public class MainActivity extends Activity implements AsyncResponse{
         });
 
     }
-            /*     asyncTask =new SearchPodcasts(new AsyncResponse() {
 
-                    @Override
-                    public void processFinish(ArrayList<Podcast> output) {
-                        podcastList=output;
-                        arrayAdapterListView();
-
-                    }
-
-
-                });*/
 
                // asyncTask.execute(searchWord);
 
@@ -153,6 +142,12 @@ public class MainActivity extends Activity implements AsyncResponse{
         }
     }*/
 
+   @Override
+   public void processFinish(ArrayList<Podcast> output) {
+
+       podcastList=output;
+       arrayAdapterListView();
+   }
        private void arrayAdapterListView() {
 
 
@@ -163,9 +158,5 @@ public class MainActivity extends Activity implements AsyncResponse{
 
     }
 
-    @Override
-    public void processFinish(ArrayList<Podcast> output) {
-        podcastList=output;
-        arrayAdapterListView();
-    }
+
 }

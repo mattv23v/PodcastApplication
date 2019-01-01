@@ -46,7 +46,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:inputType="textNoSuggestions"
-        android:text="Name" />
+        android:inputType="textNoSuggestions" />
 
 </RelativeLayout>

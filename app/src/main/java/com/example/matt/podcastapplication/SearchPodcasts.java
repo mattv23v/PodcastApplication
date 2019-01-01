@@ -1,5 +1,6 @@
 package com.example.matt.podcastapplication;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -14,14 +15,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> {
     private ArrayList<Podcast> podcastArrayList = new ArrayList<Podcast>();
     private JSONObject myObj = null;
     public AsyncResponse delegate = null;
     private Context mContext;
+    ProgressDialog mProgress;
+
 
 
     public SearchPodcasts(Context context){
@@ -29,6 +31,19 @@ class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> 
         this.delegate = (AsyncResponse) context;
 
     }
+
+    @Override
+    public void onPreExecute() {
+        mProgress = new ProgressDialog(mContext);
+        mProgress.setMessage("Searching...");
+        mProgress.show();
+    }
+
+
+    protected void onProgressUpdate(String... values) {
+        mProgress.setMessage(values[0]);
+    }
+
 
     @Override
     protected HttpResponse<JsonNode> doInBackground(String... searchWord) {
@@ -58,6 +73,7 @@ class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> 
 
     @Override
     protected void onPostExecute(HttpResponse<JsonNode> response) {
+        mProgress.dismiss();
 
         myObj = response.getBody().getObject();
         JSONArray results = null;

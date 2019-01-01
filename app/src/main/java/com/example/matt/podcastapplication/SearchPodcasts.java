@@ -40,11 +40,6 @@ class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> 
     }
 
 
-    protected void onProgressUpdate(String... values) {
-        mProgress.setMessage(values[0]);
-    }
-
-
     @Override
     protected HttpResponse<JsonNode> doInBackground(String... searchWord) {
 

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> {
     private ArrayList<Podcast> podcastArrayList = new ArrayList<Podcast>();
     private JSONObject myObj = null;
-    public AsyncResponse delegate = null;
+    public PodcastResponse delegate = null;
     private Context mContext;
     ProgressDialog mProgress;
 
@@ -28,7 +28,7 @@ class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> 
 
     public SearchPodcasts(Context context){
         this.mContext = context;
-        this.delegate = (AsyncResponse) context;
+        this.delegate = (PodcastResponse) context;
 
     }
 
@@ -83,12 +83,12 @@ class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> 
                 JSONObject currentResult = results.getJSONObject(index);
                 String titleOriginal = currentResult.getString("title_original");
                 String descriptionOriginal = currentResult.getString("description_original");
-                String audio = currentResult.getString("listennotes_url");
+                String id = currentResult.getString("id");
                 descriptionOriginal = descriptionOriginal.substring(0, Math.min(descriptionOriginal.length(), 150));
                 if (descriptionOriginal.length()==150)
                     descriptionOriginal = descriptionOriginal+"...";
                 descriptionOriginal = descriptionOriginal.replace("&nbsp;","");
-                Podcast currentCast = new Podcast(titleOriginal,descriptionOriginal,audio);
+                Podcast currentCast = new Podcast(titleOriginal,descriptionOriginal,id);
 
                 podcastArrayList.add(currentCast);
 

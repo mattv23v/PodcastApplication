@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class PodcastPlayer extends Activity {
+import java.util.ArrayList;
+
+public class PodcastPlayer extends Activity implements EpisodeResponse {
 
     private Button btn;
     private boolean playPause;
@@ -19,12 +21,14 @@ public class PodcastPlayer extends Activity {
     private ProgressDialog progressDialog;
     private boolean initialStage = true;
     private Podcast podcast;
+    private String title;
+    private String id;
+    private ArrayList episodeList;
 
-    public PodcastPlayer(Podcast podcast){
-        this.podcast = podcast;
-    }
+
     public PodcastPlayer(){
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,13 @@ public class PodcastPlayer extends Activity {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         progressDialog = new ProgressDialog(this);
+        Bundle b = getIntent().getExtras();
+        id = b.getString("id");
+        title = b.getString("title");
+
+        new SearchEpisode(PodcastPlayer.this).execute(title,id);
+
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +81,11 @@ public class PodcastPlayer extends Activity {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+    }
+
+    @Override
+    public void processFinish(ArrayList<Episode> output) {
+        episodeList=output;
     }
 
     class Player extends AsyncTask<String, Void, Boolean> {

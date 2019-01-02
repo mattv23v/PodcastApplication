@@ -3,12 +3,12 @@ package com.example.matt.podcastapplication;
 public class Podcast {
     private String title;
     private String description;
-    private String audio;
+    private String id;
 
     public Podcast(String title, String description, String audio) {
         this.title = title;
         this.description = description;
-        this.audio = audio;
+        this.id = audio;
     }
 
     public String getTitle() {
@@ -19,7 +19,7 @@ public class Podcast {
         return description;
     }
 
-    public String getAudio() {
-        return audio;
+    public String getID() {
+        return id;
     }
 }

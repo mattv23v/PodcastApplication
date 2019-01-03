@@ -5,6 +5,11 @@ public class Episode {
     private String title;
     private String date;
 
+    public Episode(String audio, String title, String date) {
+        this.audio = audio;
+        this.title = title;
+        this.date = date;
+    }
     public String getAudio() {
         return audio;
     }
@@ -17,10 +22,5 @@ public class Episode {
         return date;
     }
 
-    public Episode(String audio, String title, String date) {
-        this.audio = audio;
-        this.title = title;
 
-        this.date = date;
-    }
 }

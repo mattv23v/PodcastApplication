@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements PodcastResponse{
    private void arrayAdapterListView() {
 
 
-       final PodcastListAdapter adapter = new PodcastListAdapter(this, R.layout.adapter_view_layout, podcastList);
+       final PodcastListAdapter adapter = new PodcastListAdapter(this, R.layout.podcast_view_layout, podcastList);
        mListView.setAdapter(adapter);
 
            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,9 +76,9 @@ public class MainActivity extends Activity implements PodcastResponse{
                    Toast.makeText(getApplicationContext(),
                            podCast.getTitle().toString(), Toast.LENGTH_LONG).show();
 
-                   PodcastPlayer player = new PodcastPlayer();
+                   EpisodeDisplay display = new EpisodeDisplay();
 
-                   Intent myIntent = new Intent(MainActivity.this,player.getClass());
+                   Intent myIntent = new Intent(MainActivity.this,display.getClass());
                    myIntent.putExtra("id",podCast.getID());
                    myIntent.putExtra("title",podCast.getTitle());
                    startActivity(myIntent);

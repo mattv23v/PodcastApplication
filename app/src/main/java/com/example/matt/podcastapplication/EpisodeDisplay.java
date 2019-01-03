@@ -6,42 +6,46 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class PodcastPlayer extends Activity implements EpisodeResponse {
+public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
     private Button btn;
     private boolean playPause;
     private MediaPlayer mediaPlayer;
     private ProgressDialog progressDialog;
     private boolean initialStage = true;
-    private Podcast podcast;
     private String title;
     private String id;
     private ArrayList episodeList;
+    private ListView mListView;
 
-
-    public PodcastPlayer(){
+    public EpisodeDisplay(){
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.podcast_player_layout);
+        setContentView(R.layout.episode_display_layout);
         btn = (Button) findViewById(R.id.audioStreamBtn);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         progressDialog = new ProgressDialog(this);
+        episodeList =new ArrayList<Episode>();
         Bundle b = getIntent().getExtras();
         id = b.getString("id");
         title = b.getString("title");
+        mListView = (ListView) findViewById(R.id.listView);
 
-        new SearchEpisode(PodcastPlayer.this).execute(title,id);
+        new SearchEpisode(EpisodeDisplay.this).execute(title,id);
+
+
 
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +89,15 @@ public class PodcastPlayer extends Activity implements EpisodeResponse {
 
     @Override
     public void processFinish(ArrayList<Episode> output) {
+
         episodeList=output;
+        arrayAdapterListView();
+
+    }
+    private void arrayAdapterListView() {
+
+        final EpisodeListAdapter adapter = new EpisodeListAdapter(this, R.layout.episode_view_layout, episodeList);
+        mListView.setAdapter(adapter);
     }
 
     class Player extends AsyncTask<String, Void, Boolean> {
@@ -138,5 +150,7 @@ public class PodcastPlayer extends Activity implements EpisodeResponse {
             progressDialog.setMessage("Buffering...");
             progressDialog.show();
         }
+
+
+        }
     }
-}

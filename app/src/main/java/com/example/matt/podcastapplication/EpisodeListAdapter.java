@@ -1,5 +1,6 @@
 package com.example.matt.podcastapplication;
 
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PodcastListAdapter extends ArrayAdapter<Podcast> {
+public class EpisodeListAdapter extends ArrayAdapter<Episode> {
 
 
 
@@ -36,7 +37,7 @@ public class PodcastListAdapter extends ArrayAdapter<Podcast> {
      * @param resource
      * @param objects
      */
-    public PodcastListAdapter(Context context, int resource, ArrayList<Podcast> objects) {
+    public EpisodeListAdapter(Context context, int resource, ArrayList<Episode> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
@@ -45,12 +46,12 @@ public class PodcastListAdapter extends ArrayAdapter<Podcast> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //get the podcast information
+        //get the episode information
         String title = getItem(position).getTitle();
-        String description = getItem(position).getDescription();
+        String date = getItem(position).getDate();
 
-        //Create the podcast object with the information
-        Podcast podcast = new Podcast(title, description, null);
+        //Create the episode object with the information
+        Episode episode = new Episode(null, title, date);
 
         //create the view result for showing the animation
         final View result;
@@ -76,13 +77,13 @@ public class PodcastListAdapter extends ArrayAdapter<Podcast> {
         }
 
 
-         Animation animation = AnimationUtils.loadAnimation(mContext,
+        Animation animation = AnimationUtils.loadAnimation(mContext,
                 (position > lastPosition) ? R.anim.load_down_anim : R.anim.load_up_anim);
         result.startAnimation(animation);
         lastPosition = position;
 
-        holder.title.setText(podcast.getTitle());
-        holder.description.setText(podcast.getDescription());
+        holder.title.setText(episode.getTitle());
+        holder.description.setText(episode.getDate());
 
 
         return convertView;

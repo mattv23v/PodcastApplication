@@ -2,15 +2,21 @@ package com.example.matt.podcastapplication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,6 +31,9 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
     private String id;
     private ArrayList episodeList;
     private ListView mListView;
+
+    private MediaPlayerService player;
+    boolean serviceBound = false;
 
     public EpisodeDisplay(){
     }
@@ -45,47 +54,42 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
         new SearchEpisode(EpisodeDisplay.this).execute(title,id);
 
+        playAudio("https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg");
 
 
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!playPause) {
-                    btn.setText("Pause Streaming");
-
-                    if (initialStage) {
-                        new Player().execute("https://www.ssaurel.com/tmp/mymusic.mp3");
-                    } else {
-                        if (!mediaPlayer.isPlaying())
-                            mediaPlayer.start();
-                    }
-
-                    playPause = true;
-
-                } else {
-                    btn.setText("Launch Streaming");
-
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                    }
-
-                    playPause = false;
-                }
-            }
-        });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    //Binding this Client to the AudioPlayer Service
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
+            player = binder.getService();
+            serviceBound = true;
 
-        if (mediaPlayer != null) {
-            mediaPlayer.reset();
-            mediaPlayer.release();
-            mediaPlayer = null;
+            Toast.makeText(EpisodeDisplay.this, "Service Bound", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            serviceBound = false;
+        }
+    };
+    private void playAudio(String media) {
+        //Check is service is active
+        if (!serviceBound) {
+            Intent playerIntent = new Intent(this, MediaPlayerService.class);
+            playerIntent.putExtra("media", media);
+            startService(playerIntent);
+            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        } else {
+            //Service is active
+            //Send media with BroadcastReceiver
         }
     }
+
 
     @Override
     public void processFinish(ArrayList<Episode> output) {
@@ -94,63 +98,12 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
         arrayAdapterListView();
 
     }
+
     private void arrayAdapterListView() {
 
         final EpisodeListAdapter adapter = new EpisodeListAdapter(this, R.layout.episode_view_layout, episodeList);
         mListView.setAdapter(adapter);
     }
 
-    class Player extends AsyncTask<String, Void, Boolean> {
 
-        @Override
-
-        protected Boolean doInBackground(String... strings) {
-            Boolean prepared = false;
-
-            try {
-                mediaPlayer.setDataSource(strings[0]);
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
-                        initialStage = true;
-                        playPause = false;
-                        btn.setText("Launch Streaming");
-                        mediaPlayer.stop();
-                        mediaPlayer.reset();
-                    }
-                });
-
-                mediaPlayer.prepare();
-                prepared = true;
-
-            } catch (Exception e) {
-                Log.e("MyAudioStreamingApp", e.getMessage());
-                prepared = false;
-            }
-
-            return prepared;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-
-            if (progressDialog.isShowing()) {
-                progressDialog.cancel();
-            }
-
-            mediaPlayer.start();
-            initialStage = false;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog.setMessage("Buffering...");
-            progressDialog.show();
-        }
-
-
-        }
     }

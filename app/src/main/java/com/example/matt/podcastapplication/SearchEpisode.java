@@ -38,13 +38,12 @@ public class SearchEpisode extends AsyncTask<String, Integer, HttpResponse<JsonN
         HttpResponse<JsonNode> request = null;
         title=search[0];
         id=search[1];
+        title = title.replaceAll(" ", "+");
         try {
-
-            request = Unirest.get("https://listennotes.p.mashape.com/api/v1/search?language=English&ocid=f2dbc548f2f54604a6262bca5333d2e1&offset=0&q=sam&sort_by_date=0&type=episode")
+            request = Unirest.get("https://listennotes.p.mashape.com/api/v1/search?language=English&ocid="+id+"&offset=0&q="+title+"&sort_by_date=1&type=episode")
                     .header("X-Mashape-Key", "4aIkQzrwdWmshzRSBreoEcbXwaEHp1tqNTGjsndU6yVzoGANFc")
                     .header("Accept", "application/json")
                     .asJson();
-
 
         } catch (UnirestException e) {
             Log.e("mytag",e.toString());

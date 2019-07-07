@@ -49,10 +49,10 @@ class SearchPodcasts extends AsyncTask<String, Integer, HttpResponse<JsonNode>> 
 
         try {
 
-            request = Unirest.get("https://api.listennotes.com/api/v1/search?language=English&offset=0&only_in=title&published_after=0" +
+            request = Unirest.get("https://listennotes.p.rapidapi.com/api/v1/search?language=English&offset=0&only_in=title&published_after=0" +
                     "&published_before=0&q="+search+"&sort_by_date=0&type=podcast")
-                    .header("X-Mashape-Key", "4aIkQzrwdWmshzRSBreoEcbXwaEHp1tqNTGjsndU6yVzoGANFc")
-                    .header("Accept", "application/json")
+                    .header("X-RapidAPI-Host", "listennotes.p.rapidapi.com")
+                    .header("X-RapidAPI-Key", "xnqNuYG6OfmshAZubjKfy8Oc8K1op1weBK6jsnaK7qsH8WHLOg")
                     .asJson();
 
 

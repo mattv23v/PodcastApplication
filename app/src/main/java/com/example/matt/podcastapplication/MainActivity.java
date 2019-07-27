@@ -73,8 +73,7 @@ public class MainActivity extends Activity implements PodcastResponse{
                                        int position, long id) {
                    Podcast podCast=adapter.getItem(position);
 
-                   Toast.makeText(getApplicationContext(),
-                           podCast.getTitle().toString(), Toast.LENGTH_LONG).show();
+
 
                    EpisodeDisplay display = new EpisodeDisplay();
 

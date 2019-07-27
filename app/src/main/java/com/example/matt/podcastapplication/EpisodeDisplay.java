@@ -82,16 +82,15 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
                                     int position, long id) {
                 Episode episode=adapter.getItem(position);
 
-                Toast.makeText(getApplicationContext(),
-                        episode.getAudio().toString(), Toast.LENGTH_LONG).show();
+
 
 
 
                 AudioPlayer player = new AudioPlayer();
 
                 Intent myIntent = new Intent(EpisodeDisplay.this,player.getClass());
-                // myIntent.putExtra("title",episode.getTitle());
-                // myIntent.putExtra("audio",episode.getAudio());
+                myIntent.putExtra("title",episode.getTitle());
+                myIntent.putExtra("audio",episode.getAudio());
                 startActivity(myIntent);
             }
 

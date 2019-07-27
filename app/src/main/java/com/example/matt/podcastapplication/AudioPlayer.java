@@ -1,5 +1,6 @@
 package com.example.matt.podcastapplication;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class AudioPlayer extends AppCompatActivity {
@@ -18,10 +21,15 @@ public class AudioPlayer extends AppCompatActivity {
     private SeekBar songPrgs;
     private static int oTime =0, sTime =0, eTime =0, fTime = 5000, bTime = 5000;
     private Handler hdlr = new Handler();
+    private String title;
+    private String audio;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.audio_player_layout);
+        Bundle b = getIntent().getExtras();
+        audio = b.getString("audio");
+        title = b.getString("title");
         backwardbtn = (ImageButton)findViewById(R.id.btnBackward);
         forwardbtn = (ImageButton)findViewById(R.id.btnForward);
         playbtn = (ImageButton)findViewById(R.id.btnPlay);
@@ -29,8 +37,21 @@ public class AudioPlayer extends AppCompatActivity {
         songName = (TextView)findViewById(R.id.txtSname);
         startTime = (TextView)findViewById(R.id.txtStartTime);
         songTime = (TextView)findViewById(R.id.txtSongTime);
-        songName.setText("Baitikochi Chuste");
+        songName.setText(title);
        // mPlayer = MediaPlayer.create(this, R.raw.baitikochi_chuste);
+        mPlayer = new MediaPlayer();
+        String url = audio; // your URL here
+        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mPlayer.setDataSource(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mPlayer.prepare(); // might take long! (for buffering, etc)
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         songPrgs = (SeekBar)findViewById(R.id.sBar);
         songPrgs.setClickable(false);
         pausebtn.setEnabled(false);

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -32,7 +33,6 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
     private ArrayList episodeList;
     private ListView mListView;
 
-    private MediaPlayerService player;
     boolean serviceBound = false;
 
     public EpisodeDisplay(){
@@ -54,41 +54,12 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
         new SearchEpisode(EpisodeDisplay.this).execute(title,id);
 
-        playAudio("https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg");
+     //   playAudio("https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg");
 
 
 
     }
 
-    //Binding this Client to the AudioPlayer Service
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
-            player = binder.getService();
-            serviceBound = true;
-
-            Toast.makeText(EpisodeDisplay.this, "Service Bound", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            serviceBound = false;
-        }
-    };
-    private void playAudio(String media) {
-        //Check is service is active
-        if (!serviceBound) {
-            Intent playerIntent = new Intent(this, MediaPlayerService.class);
-            playerIntent.putExtra("media", media);
-            startService(playerIntent);
-            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-        } else {
-            //Service is active
-            //Send media with BroadcastReceiver
-        }
-    }
 
 
     @Override
@@ -103,6 +74,29 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
         final EpisodeListAdapter adapter = new EpisodeListAdapter(this, R.layout.episode_view_layout, episodeList);
         mListView.setAdapter(adapter);
+
+        AudioPlayer player = new AudioPlayer();
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Episode episode=adapter.getItem(position);
+
+                Toast.makeText(getApplicationContext(),
+                        episode.getAudio().toString(), Toast.LENGTH_LONG).show();
+
+
+
+                AudioPlayer player = new AudioPlayer();
+
+                Intent myIntent = new Intent(EpisodeDisplay.this,player.getClass());
+                // myIntent.putExtra("title",episode.getTitle());
+                // myIntent.putExtra("audio",episode.getAudio());
+                startActivity(myIntent);
+            }
+
+        });
+
     }
 
 

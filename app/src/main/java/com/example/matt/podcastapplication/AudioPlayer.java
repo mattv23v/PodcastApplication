@@ -30,13 +30,13 @@ public class AudioPlayer extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         audio = b.getString("audio");
         title = b.getString("title");
-        backwardbtn = (ImageButton)findViewById(R.id.btnBackward);
-        forwardbtn = (ImageButton)findViewById(R.id.btnForward);
-        playbtn = (ImageButton)findViewById(R.id.btnPlay);
-        pausebtn = (ImageButton)findViewById(R.id.btnPause);
-        songName = (TextView)findViewById(R.id.txtSname);
-        startTime = (TextView)findViewById(R.id.txtStartTime);
-        songTime = (TextView)findViewById(R.id.txtSongTime);
+        backwardbtn = findViewById(R.id.btnBackward);
+        forwardbtn = findViewById(R.id.btnForward);
+        playbtn = findViewById(R.id.btnPlay);
+        pausebtn = findViewById(R.id.btnPause);
+        songName = findViewById(R.id.txtSname);
+        startTime = findViewById(R.id.txtStartTime);
+        songTime = findViewById(R.id.txtSongTime);
         songName.setText(title);
        // mPlayer = MediaPlayer.create(this, R.raw.baitikochi_chuste);
         mPlayer = new MediaPlayer();
@@ -52,7 +52,7 @@ public class AudioPlayer extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        songPrgs = (SeekBar)findViewById(R.id.sBar);
+        songPrgs = findViewById(R.id.sBar);
         songPrgs.setClickable(false);
         pausebtn.setEnabled(false);
         eTime = mPlayer.getDuration();

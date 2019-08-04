@@ -32,7 +32,7 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
     private String id;
     private ArrayList episodeList;
     private ListView mListView;
-
+    private AudioPlayer player;
     boolean serviceBound = false;
 
     public EpisodeDisplay(){
@@ -51,6 +51,7 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
         id = b.getString("id");
         title = b.getString("title");
         mListView = (ListView) findViewById(R.id.listView);
+        player = new AudioPlayer();
 
         new SearchEpisode(EpisodeDisplay.this).execute(title,id);
 
@@ -75,7 +76,6 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
         final EpisodeListAdapter adapter = new EpisodeListAdapter(this, R.layout.episode_view_layout, episodeList);
         mListView.setAdapter(adapter);
 
-        AudioPlayer player = new AudioPlayer();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -86,7 +86,7 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
 
 
-                AudioPlayer player = new AudioPlayer();
+
 
                 Intent myIntent = new Intent(EpisodeDisplay.this,player.getClass());
                 myIntent.putExtra("title",episode.getTitle());

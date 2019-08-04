@@ -41,7 +41,7 @@ public class SearchEpisode extends AsyncTask<String, Integer, HttpResponse<JsonN
         title = title.replaceAll(" ", "+");
         try {
             request = Unirest.get("https://listennotes.p.mashape.com/api/v1/search?language=English&ocid="+id+"&offset=0&q="+title+"&sort_by_date=1&type=episode")
-                    .header("X-Mashape-Key", "4aIkQzrwdWmshzRSBreoEcbXwaEHp1tqNTGjsndU6yVzoGANFc")
+                    .header("X-RapidAPI-Key", "xnqNuYG6OfmshAZubjKfy8Oc8K1op1weBK6jsnaK7qsH8WHLOg")
                     .header("Accept", "application/json")
                     .asJson();
 

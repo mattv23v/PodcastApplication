@@ -55,24 +55,23 @@ public class AudioPlayer extends AppCompatActivity {
         songPrgs = (SeekBar)findViewById(R.id.sBar);
         songPrgs.setClickable(false);
         pausebtn.setEnabled(false);
+        eTime = mPlayer.getDuration();
+        sTime = mPlayer.getCurrentPosition();
+        songPrgs.setMax(eTime);
+        oTime =1;
+        songTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(eTime),
+                TimeUnit.MILLISECONDS.toSeconds(eTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(eTime))) );
+        startTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(sTime),
+                TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(sTime))) );
+        songPrgs.setProgress(sTime);
+        hdlr.postDelayed(UpdateSongTime, 100);
 
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(AudioPlayer.this, "Playing Audio", Toast.LENGTH_SHORT).show();
                 mPlayer.start();
-                eTime = mPlayer.getDuration();
-                sTime = mPlayer.getCurrentPosition();
-                if(oTime == 0){
-                    songPrgs.setMax(eTime);
-                    oTime =1;
-                }
-                songTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(eTime),
-                        TimeUnit.MILLISECONDS.toSeconds(eTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(eTime))) );
-                startTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(sTime),
-                        TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(sTime))) );
-                songPrgs.setProgress(sTime);
-                hdlr.postDelayed(UpdateSongTime, 100);
+
                 pausebtn.setEnabled(true);
                 playbtn.setEnabled(false);
             }

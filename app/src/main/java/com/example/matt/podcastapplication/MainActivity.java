@@ -26,6 +26,7 @@ public class MainActivity extends Activity implements PodcastResponse{
     private SearchPodcasts search;
     private ArrayList podcastList;
     private ListView mListView;
+    private EpisodeDisplay display;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,7 @@ public class MainActivity extends Activity implements PodcastResponse{
         edittext = (EditText) findViewById(R.id.editText);
         podcastList=new ArrayList<Podcast>();
         mListView = (ListView) findViewById(R.id.listView);
-
+        display = new EpisodeDisplay();
 
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +76,6 @@ public class MainActivity extends Activity implements PodcastResponse{
 
 
 
-                   EpisodeDisplay display = new EpisodeDisplay();
 
                    Intent myIntent = new Intent(MainActivity.this,display.getClass());
                    myIntent.putExtra("id",podCast.getID());

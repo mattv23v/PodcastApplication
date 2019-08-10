@@ -33,7 +33,6 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
     private ArrayList episodeList;
     private ListView mListView;
     private AudioPlayer player;
-    boolean serviceBound = false;
 
     public EpisodeDisplay(){
     }
@@ -48,9 +47,12 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
         progressDialog = new ProgressDialog(this);
         episodeList =new ArrayList<Episode>();
         Bundle b = getIntent().getExtras();
-        id = b.getString("id");
-        title = b.getString("title");
+        if (b != null) {
+            id = b.getString("id");
+            title = b.getString("title");
+        }
         mListView = (ListView) findViewById(R.id.listView);
+
         player = new AudioPlayer();
 
         new SearchEpisode(EpisodeDisplay.this).execute(title,id);
@@ -89,9 +91,11 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
 
                 Intent myIntent = new Intent(EpisodeDisplay.this,player.getClass());
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 myIntent.putExtra("title",episode.getTitle());
                 myIntent.putExtra("audio",episode.getAudio());
-                startActivity(myIntent);
+
+               startActivity(myIntent);
             }
 
         });

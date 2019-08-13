@@ -10,7 +10,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -21,6 +20,7 @@ public class AudioService extends Service {
     private final IBinder iBinder = new LocalBinder();
     final String audioFileUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg";
     private String url;
+
     public AudioService() {
 
     }
@@ -53,7 +53,6 @@ public class AudioService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         url = intent.getExtras().getString("PODCAST_URL");
-        Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
         initMediaPlayer();
         return START_STICKY;
     }
@@ -61,7 +60,10 @@ public class AudioService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Service destroyed by user.", Toast.LENGTH_LONG).show();
+        if (mediaPlayer != null) {
+            stopMedia();
+            mediaPlayer.release();
+        }
     }
 
     /**
@@ -71,12 +73,19 @@ public class AudioService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             url = intent.getExtras().getString("PODCAST_URL");
-
+            stopMedia();
+            mediaPlayer.reset();
             initMediaPlayer();
-
-
         }
     };
+
+
+
+    private void register_playNewAudio() {
+        //Register playNewMedia receiver
+        IntentFilter filter = new IntentFilter(Broadcast_PLAY_NEW_AUDIO);
+        registerReceiver(playNewAudio, filter);
+    }
 
     /**
      * MediaPlayer actions
@@ -99,11 +108,6 @@ public class AudioService extends Service {
         playMedia();
     }
 
-    private void register_playNewAudio() {
-        //Register playNewMedia receiver
-        IntentFilter filter = new IntentFilter(Broadcast_PLAY_NEW_AUDIO);
-        registerReceiver(playNewAudio, filter);
-    }
 
 
     private void playMedia() {
@@ -111,5 +115,20 @@ public class AudioService extends Service {
             mediaPlayer.start();
         }
 
+    }
+
+    private void stopMedia() {
+        if (mediaPlayer == null) return;
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+
+
+    }
+
+    public void pauseMedia() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
     }
 }

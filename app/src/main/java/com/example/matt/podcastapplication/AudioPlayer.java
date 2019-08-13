@@ -19,23 +19,19 @@ import android.widget.Toast;
 
 public class AudioPlayer extends AppCompatActivity {
     private ImageButton forwardbtn, backwardbtn, pausebtn, playbtn;
-    //private MediaPlayer mPlayer;
     private TextView songName, startTime, songTime;
     private SeekBar songPrgs;
     private static int oTime =0, sTime =0, eTime =0, fTime = 5000, bTime = 5000;
     private Handler hdlr = new Handler();
     private String title;
     private String audio;
-    private AudioService player;
+    private static AudioService player;
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.example.matt.podcastapplication.AudioPlayer.PlayNewAudio";
+
     private String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      if (isMyServiceRunning(AudioService.class))
-          Toast.makeText(getApplicationContext(), "Service running!", Toast.LENGTH_LONG).show();
-      if (!isMyServiceRunning(AudioService.class))
-          Toast.makeText(getApplicationContext(), "Service not running!", Toast.LENGTH_LONG).show();
 
         //final String audioFileUrl = "http://www.dev2qa.com/demo/media/test.mp3";
 
@@ -55,7 +51,7 @@ public class AudioPlayer extends AppCompatActivity {
         url = audio; // your URL here
         songPrgs = findViewById(R.id.sBar);
         songPrgs.setClickable(false);
-        pausebtn.setEnabled(false);
+      //  pausebtn.setEnabled(false);
         /*eTime = mPlayer.getDuration();
         sTime = mPlayer.getCurrentPosition();
         songPrgs.setMax(eTime);
@@ -85,17 +81,18 @@ public class AudioPlayer extends AppCompatActivity {
 
                 }
 
-                pausebtn.setEnabled(true);
-                playbtn.setEnabled(false);
+              //  pausebtn.setEnabled(true);
+               // playbtn.setEnabled(false);
             }
         });
         pausebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           //     mPlayer.pause();
-                Toast.makeText(getApplicationContext(), "Play web audio file is paused.", Toast.LENGTH_LONG).show();
-                pausebtn.setEnabled(false);
-                playbtn.setEnabled(true);
+                if (isMyServiceRunning(AudioService.class)) {
+                    player.pauseMedia();
+                }
+            //    pausebtn.setEnabled(false);
+             //   playbtn.setEnabled(true);
             //    Toast.makeText(getApplicationContext(),"Pausing Audio", Toast.LENGTH_SHORT).show();
             }
         });
@@ -173,8 +170,10 @@ public class AudioPlayer extends AppCompatActivity {
     protected void onDestroy() {
         // Unbound background audio service when activity is destroyed.
         super.onDestroy();
-
+    //    unbindService(serviceConnection);
 
     }
+
+
 }
 

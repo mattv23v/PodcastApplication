@@ -30,7 +30,6 @@ public class AudioService extends Service {
      */
     public class LocalBinder extends Binder {
         public AudioService getService() {
-            // Return this instance of LocalService so clients can call public methods
             return AudioService.this;
         }
     }
@@ -110,7 +109,7 @@ public class AudioService extends Service {
 
 
 
-    private void playMedia() {
+    public void playMedia() {
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
         }

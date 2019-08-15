@@ -24,10 +24,8 @@ import java.util.ArrayList;
 public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
     private Button btn;
-    private boolean playPause;
     private MediaPlayer mediaPlayer;
     private ProgressDialog progressDialog;
-    private boolean initialStage = true;
     private String title;
     private String id;
     private ArrayList episodeList;
@@ -59,10 +57,7 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
 
      //   playAudio("https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg");
 
-
-
     }
-
 
 
     @Override
@@ -83,12 +78,6 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Episode episode=adapter.getItem(position);
-
-
-
-
-
-
 
                 Intent myIntent = new Intent(EpisodeDisplay.this,player.getClass());
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

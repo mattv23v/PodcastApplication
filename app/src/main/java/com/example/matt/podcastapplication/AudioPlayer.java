@@ -25,7 +25,7 @@ public class AudioPlayer extends AppCompatActivity {
     private Handler hdlr = new Handler();
     private String title;
     private String audio;
-    private static AudioService player;
+    AudioService player;
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.example.matt.podcastapplication.AudioPlayer.PlayNewAudio";
 
     private String url;
@@ -33,9 +33,6 @@ public class AudioPlayer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //final String audioFileUrl = "http://www.dev2qa.com/demo/media/test.mp3";
-
-      //  final String audioFileUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg";
         setContentView(R.layout.audio_player_layout);
         Bundle b = getIntent().getExtras();
         audio = b.getString("audio");
@@ -66,20 +63,14 @@ public class AudioPlayer extends AppCompatActivity {
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isMyServiceRunning(AudioService.class)) {
-
-                    Intent intent = new Intent(AudioPlayer.this, AudioService.class);
-                    intent.putExtra("PODCAST_URL", url);
-                    startService(intent);
-                    bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-                }
-                if (isMyServiceRunning(AudioService.class)) {
+                player.playMedia();
+               /* if (isMyServiceRunning(AudioService.class)) {
 
                     Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
                     broadcastIntent.putExtra("PODCAST_URL", url);
                     sendBroadcast(broadcastIntent);
 
-                }
+                }*/
 
               //  pausebtn.setEnabled(true);
                // playbtn.setEnabled(false);
@@ -165,12 +156,21 @@ public class AudioPlayer extends AppCompatActivity {
        return false;
    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+            Intent intent = new Intent(AudioPlayer.this, AudioService.class);
+            intent.putExtra("PODCAST_URL", url);
+            startService(intent);
+            bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
 
     @Override
     protected void onDestroy() {
         // Unbound background audio service when activity is destroyed.
         super.onDestroy();
-    //    unbindService(serviceConnection);
+        unbindService(serviceConnection);
 
     }
 

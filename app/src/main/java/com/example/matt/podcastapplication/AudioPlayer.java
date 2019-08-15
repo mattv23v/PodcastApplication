@@ -17,6 +17,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.TimeUnit;
+
 public class AudioPlayer extends AppCompatActivity {
     private ImageButton forwardbtn, backwardbtn, pausebtn, playbtn;
     private TextView songName, startTime, songTime;
@@ -49,16 +51,6 @@ public class AudioPlayer extends AppCompatActivity {
         songPrgs = findViewById(R.id.sBar);
         songPrgs.setClickable(false);
 
-        /*eTime = mPlayer.getDuration();
-        sTime = mPlayer.getCurrentPosition();
-        songPrgs.setMax(eTime);
-        oTime =1;
-        songTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(eTime),
-                TimeUnit.MILLISECONDS.toSeconds(eTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(eTime))) );
-        startTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(sTime),
-                TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(sTime))) );
-        songPrgs.setProgress(sTime);
-        hdlr.postDelayed(UpdateSongTime, 100);*/
 
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +71,7 @@ public class AudioPlayer extends AppCompatActivity {
             public void onClick(View v) {
                 if (isMyServiceRunning(AudioService.class))
                     player.forward();
+
             }
         });
         backwardbtn.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +88,15 @@ public class AudioPlayer extends AppCompatActivity {
             // Cast and assign background service's onBind method returned iBander object.
             AudioService.LocalBinder binder = (AudioService.LocalBinder) service;
             player = binder.getService();
+            eTime = player.getDurTime();
+            sTime = player.getCurrTime();
+            songPrgs.setMax(eTime);
+            songTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(eTime),
+                    TimeUnit.MILLISECONDS.toSeconds(eTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(eTime))) );
+            startTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(sTime),
+                    TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(sTime))) );
+            songPrgs.setProgress(sTime);
+            hdlr.postDelayed(UpdateSongTime, 100);
         }
 
         @Override
@@ -103,16 +105,16 @@ public class AudioPlayer extends AppCompatActivity {
 
         }
     };
-   /* private Runnable UpdateSongTime = new Runnable() {
+   private Runnable UpdateSongTime = new Runnable() {
         @Override
         public void run() {
-            sTime = mPlayer.getCurrentPosition();
+            sTime = player.getCurrTime();
             startTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(sTime),
                     TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(sTime))) );
             songPrgs.setProgress(sTime);
             hdlr.postDelayed(this, 100);
         }
-    };*/
+    };
    private boolean isMyServiceRunning(Class<?> serviceClass) {
        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -131,6 +133,8 @@ public class AudioPlayer extends AppCompatActivity {
         intent.putExtra("PODCAST_URL", url);
         startService(intent);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+
     }
 
     @Override

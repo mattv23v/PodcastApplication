@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-import static com.example.matt.podcastapplication.AudioPlayer.Broadcast_PLAY_NEW_AUDIO;
 
 public class AudioService extends Service {
     private MediaPlayer mediaPlayer;
@@ -49,7 +48,6 @@ public class AudioService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        register_playNewAudio();
 
     }
 
@@ -83,12 +81,6 @@ public class AudioService extends Service {
     };
 
 
-
-    private void register_playNewAudio() {
-        //Register playNewMedia receiver
-        IntentFilter filter = new IntentFilter(Broadcast_PLAY_NEW_AUDIO);
-        registerReceiver(playNewAudio, filter);
-    }
 
     /**
      * MediaPlayer actions
@@ -129,7 +121,14 @@ public class AudioService extends Service {
             mediaPlayer.stop();
         }
 
+    }
 
+    public int getCurrTime(){
+        return mediaPlayer.getCurrentPosition();
+    }
+
+    public int getDurTime(){
+        return mediaPlayer.getDuration();
     }
 
     public void forward(){

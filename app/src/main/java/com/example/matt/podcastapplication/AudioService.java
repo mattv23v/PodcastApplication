@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -20,6 +21,8 @@ public class AudioService extends Service {
     private final IBinder iBinder = new LocalBinder();
     final String audioFileUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6c/Grieg_Lyric_Pieces_Kobold.ogg";
     private String url;
+    private static int oTime =0, sTime =0, eTime =0, fTime = 5000, bTime = 5000;
+
 
     public AudioService() {
 
@@ -47,6 +50,7 @@ public class AudioService extends Service {
     public void onCreate() {
         super.onCreate();
         register_playNewAudio();
+
     }
 
     @Override
@@ -90,8 +94,11 @@ public class AudioService extends Service {
      * MediaPlayer actions
      */
     private void initMediaPlayer() {
-        if (mediaPlayer == null)
+        if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();//new MediaPlayer instance
+
+            oTime = 1;
+        }
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.reset();
         try {
@@ -125,6 +132,26 @@ public class AudioService extends Service {
 
     }
 
+    public void forward(){
+        eTime = mediaPlayer.getDuration();
+        sTime = mediaPlayer.getCurrentPosition();
+        if((sTime + fTime) <= eTime) {
+            sTime = sTime + fTime;
+            mediaPlayer.seekTo(sTime);
+        }else{
+            Toast.makeText(getApplicationContext(), "Cannot jump forward 5 seconds", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void back(){
+        sTime = mediaPlayer.getCurrentPosition();
+        if((sTime - bTime) > 0) {
+            sTime = sTime - bTime;
+            mediaPlayer.seekTo(sTime);
+        }else{
+            Toast.makeText(getApplicationContext(), "Cannot jump backward 5 seconds", Toast.LENGTH_SHORT).show();
+        }
+    }
     public void pauseMedia() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();

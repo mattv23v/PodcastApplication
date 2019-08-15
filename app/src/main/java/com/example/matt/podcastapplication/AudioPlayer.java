@@ -27,8 +27,8 @@ public class AudioPlayer extends AppCompatActivity {
     private String audio;
     AudioService player;
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.example.matt.podcastapplication.AudioPlayer.PlayNewAudio";
-
     private String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +48,7 @@ public class AudioPlayer extends AppCompatActivity {
         url = audio; // your URL here
         songPrgs = findViewById(R.id.sBar);
         songPrgs.setClickable(false);
-      //  pausebtn.setEnabled(false);
+
         /*eTime = mPlayer.getDuration();
         sTime = mPlayer.getCurrentPosition();
         songPrgs.setMax(eTime);
@@ -64,61 +64,28 @@ public class AudioPlayer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 player.playMedia();
-               /* if (isMyServiceRunning(AudioService.class)) {
 
-                    Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
-                    broadcastIntent.putExtra("PODCAST_URL", url);
-                    sendBroadcast(broadcastIntent);
-
-                }*/
-
-              //  pausebtn.setEnabled(true);
-               // playbtn.setEnabled(false);
             }
         });
         pausebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isMyServiceRunning(AudioService.class)) {
+                if (isMyServiceRunning(AudioService.class))
                     player.pauseMedia();
-                }
-            //    pausebtn.setEnabled(false);
-             //   playbtn.setEnabled(true);
-            //    Toast.makeText(getApplicationContext(),"Pausing Audio", Toast.LENGTH_SHORT).show();
             }
         });
         forwardbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if((sTime + fTime) <= eTime)
-                {
-                    sTime = sTime + fTime;
-               //     mPlayer.seekTo(sTime);
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(), "Cannot jump forward 5 seconds", Toast.LENGTH_SHORT).show();
-                }
-                if(!playbtn.isEnabled()){
-                    playbtn.setEnabled(true);
-                }
+                if (isMyServiceRunning(AudioService.class))
+                    player.forward();
             }
         });
         backwardbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if((sTime - bTime) > 0)
-                {
-                    sTime = sTime - bTime;
-         //           mPlayer.seekTo(sTime);
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(), "Cannot jump backward 5 seconds", Toast.LENGTH_SHORT).show();
-                }
-                if(!playbtn.isEnabled()){
-                    playbtn.setEnabled(true);
-                }
+                if (isMyServiceRunning(AudioService.class))
+                    player.back();
             }
         });
     }
@@ -160,10 +127,10 @@ public class AudioPlayer extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // Bind to LocalService
-            Intent intent = new Intent(AudioPlayer.this, AudioService.class);
-            intent.putExtra("PODCAST_URL", url);
-            startService(intent);
-            bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        Intent intent = new Intent(AudioPlayer.this, AudioService.class);
+        intent.putExtra("PODCAST_URL", url);
+        startService(intent);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override

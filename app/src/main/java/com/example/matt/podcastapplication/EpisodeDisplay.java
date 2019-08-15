@@ -80,11 +80,9 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
                 Episode episode=adapter.getItem(position);
 
                 Intent myIntent = new Intent(EpisodeDisplay.this,player.getClass());
-                myIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 myIntent.putExtra("title",episode.getTitle());
                 myIntent.putExtra("audio",episode.getAudio());
-
-               startActivity(myIntent);
+                startActivity(myIntent);
             }
 
         });

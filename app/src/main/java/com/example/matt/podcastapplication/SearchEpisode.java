@@ -70,6 +70,8 @@ public class SearchEpisode extends AsyncTask<String, Integer, HttpResponse<JsonN
                 String audio = currentResult.getString("audio");
                 String episodeTitle = currentResult.getString("title_original");
                 String date = currentResult.getString("pub_date_ms");
+                String image = currentResult.getString("image");
+
                 long longDate = Long.parseLong(date);
 
                 Calendar calendar = Calendar.getInstance();
@@ -78,7 +80,7 @@ public class SearchEpisode extends AsyncTask<String, Integer, HttpResponse<JsonN
                 int mMonth = calendar.get(Calendar.MONTH);
                 int mDay = calendar.get(Calendar.DAY_OF_MONTH);
                 String pudDate = mMonth+"/"+mDay+"/"+mYear;
-                Episode currentEpisode = new Episode(audio,episodeTitle,pudDate);
+                Episode currentEpisode = new Episode(audio,episodeTitle,pudDate,image);
 
                 episodeArrayList.add(currentEpisode);
 

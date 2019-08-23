@@ -1,74 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
+
     <TextView
         android:id="@+id/txtVw1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Now Playing: "
         android:layout_marginTop="30dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="Now Playing: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/txtSname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtVw1"
-        android:layout_toRightOf="@+id/txtVw1"
-        android:text="TextView" />
+        android:text="TextView"
+        app:layout_constraintBaseline_toBaselineOf="@+id/txtVw1"
+        app:layout_constraintLeft_toRightOf="@+id/txtVw1" />
+
     <ImageButton
         android:id="@+id/btnBackward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="44dp"
         android:layout_marginLeft="20dp"
-        android:src="@android:drawable/ic_media_rew" />
+        android:layout_marginBottom="44dp"
+        android:src="@android:drawable/ic_media_rew"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageButton
         android:id="@+id/btnPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnBackward"
         android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/btnBackward"
-        android:src="@android:drawable/ic_media_play" />
+        android:src="@android:drawable/ic_media_play"
+        app:layout_constraintLeft_toRightOf="@+id/btnBackward"
+        app:layout_constraintTop_toTopOf="@+id/btnBackward" />
+
     <ImageButton
         android:id="@+id/btnPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnPlay"
         android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/btnPlay"
-        android:src="@android:drawable/ic_media_pause" />
+        android:src="@android:drawable/ic_media_pause"
+        app:layout_constraintLeft_toRightOf="@+id/btnPlay"
+        app:layout_constraintTop_toTopOf="@+id/btnPlay" />
+
     <ImageButton
         android:id="@+id/btnForward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnPause"
         android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/btnPause"
         android:contentDescription="@+id/imageButton3"
-        android:src="@android:drawable/ic_media_ff" />
+        android:src="@android:drawable/ic_media_ff"
+        app:layout_constraintLeft_toRightOf="@+id/btnPause"
+        app:layout_constraintTop_toTopOf="@+id/btnPause" />
+
     <TextView
         android:id="@+id/txtStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/sBar"
-        android:text="0 min, 0 sec" />
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="0 min, 0 sec"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sBar" />
+
     <SeekBar
         android:id="@+id/sBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnBackward"
-        android:layout_toLeftOf="@+id/txtSongTime"
-        android:layout_toRightOf="@+id/txtStartTime" />
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnBackward"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintLeft_toRightOf="@+id/txtStartTime"
+        app:layout_constraintRight_toLeftOf="@+id/txtSongTime" />
+
     <TextView
         android:id="@+id/txtSongTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/btnForward"
-        android:layout_alignTop="@+id/sBar"
-        android:text="0 min, 0 sec " />
-</RelativeLayout>
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="0 min, 0 sec "
+        app:layout_constraintLeft_toRightOf="@+id/btnForward"
+        app:layout_constraintTop_toTopOf="@+id/sBar" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="295dp"
+        android:layout_height="282dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="156dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

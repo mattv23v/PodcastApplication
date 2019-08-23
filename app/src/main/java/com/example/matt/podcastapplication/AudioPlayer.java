@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 
@@ -13,10 +16,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class AudioPlayer extends AppCompatActivity {
@@ -27,9 +36,13 @@ public class AudioPlayer extends AppCompatActivity {
     private Handler hdlr = new Handler();
     private String title;
     private String audio;
+    private String image;
     AudioService player;
-    public static final String Broadcast_PLAY_NEW_AUDIO = "com.example.matt.podcastapplication.AudioPlayer.PlayNewAudio";
     private String url;
+    private ImageView imageView;
+    URL ImageUrl = null;
+    InputStream is = null;
+    Bitmap bmImg = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +52,8 @@ public class AudioPlayer extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         audio = b.getString("audio");
         title = b.getString("title");
+        image = b.getString("image");
+
         backwardbtn = findViewById(R.id.btnBackward);
         forwardbtn = findViewById(R.id.btnForward);
         playbtn = findViewById(R.id.btnPlay);
@@ -50,11 +65,15 @@ public class AudioPlayer extends AppCompatActivity {
         url = audio; // your URL here
         songPrgs = findViewById(R.id.sBar);
         songPrgs.setClickable(false);
-
+        imageView = findViewById(R.id.imageView3);
+        AsyncTaskExample asyncTask=new AsyncTaskExample();
+        asyncTask.execute(image);
+        //asyncTask.execute("https://www.tutorialspoint.com/images/tp-logo-diamond.png");
 
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isMyServiceRunning(AudioService.class))
                 player.playMedia();
 
             }
@@ -81,6 +100,32 @@ public class AudioPlayer extends AppCompatActivity {
                     player.back();
             }
         });
+    }
+    private class AsyncTaskExample extends AsyncTask<String, String, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            try {
+                ImageUrl = new URL(strings[0]);
+                HttpURLConnection conn = (HttpURLConnection) ImageUrl.openConnection();
+                conn.setDoInput(true);
+                conn.connect();
+                is = conn.getInputStream();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                bmImg = BitmapFactory.decodeStream(is, null, options);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bmImg;
+        }
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if (imageView != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
     }
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override

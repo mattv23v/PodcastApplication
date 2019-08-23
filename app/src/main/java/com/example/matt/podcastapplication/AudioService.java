@@ -109,10 +109,7 @@ public class AudioService extends Service {
 
 
     public void playMedia() {
-        if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
-        }
-
     }
 
     private void stopMedia() {

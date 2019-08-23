@@ -51,7 +51,7 @@ public class EpisodeListAdapter extends ArrayAdapter<Episode> {
         String date = getItem(position).getDate();
 
         //Create the episode object with the information
-        Episode episode = new Episode(null, title, date);
+        Episode episode = new Episode(null, title, date, null);
 
         //create the view result for showing the animation
         final View result;

@@ -82,6 +82,7 @@ public class EpisodeDisplay extends Activity implements EpisodeResponse {
                 Intent myIntent = new Intent(EpisodeDisplay.this,player.getClass());
                 myIntent.putExtra("title",episode.getTitle());
                 myIntent.putExtra("audio",episode.getAudio());
+                myIntent.putExtra("image",episode.getImage());
                 startActivity(myIntent);
             }
 
